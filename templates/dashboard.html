@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+          <style>
+              .main {
+                  color:red;
+              }
+              .details{
+                  color: #008000;
+              }
+              </style>
+        <script>
+        var request = new XMLHttpRequest();
+        unit_id = window.location.pathname
+        unit_id = unit_id.split('/')[3]
+        console.log(unit_id)
+            
+request.open('GET', 'http://172.16.8.242:8080/KSP/TopAccidentCity/' + unit_id, true);
+
+request.onload = function () {
+
+  // Begin accessing JSON data here
+  function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+  var today_date = formatDate(Date())
+  var data = JSON.parse(this.response);
+    if (request.status >= 200 && request.status < 400) {
+    document.write('<script> function tdclick(event)\
+        {\
+            var target = event.target || event.srcElement; \
+            console.log(target.id); \
+            alert(event.id);\
+        }<\/script>')
+    console.log(data)
+    document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">')    
+    document.write('<h1 style="text-align:center;color:#d84f57">' + data['Unit_Name'] + '<h1>')
+    document.write('<h3 style="text-align:center;color:#d84f57"> 1 Death in Every' + data['Denominator'] + ' days <h3>')
+    document.write('<br>')
+    //document.write(' <div class="col-12 col-sm-12 col-lg-12"> <div class="table-responsive">')
+       Object.keys(data['Unit_Details']).forEach(element => {
+        document.write('<table class="table table-striped table-sm">')
+        document.write('<th style="color:white;white-space: pre;  background-color:#2C0BC3;text-align:center;width=100%">' +data['Unit_Details'][element]['area_address'] + '</th>')
+        document.write('<tr>')
+        document.write('<td style="color:black; text-align:center;background-color:#25CAEE">1 Death in Every' + data['Cluster_Denominator'] + ' days </td>')   
+        document.write('</tr>')
+
+        all_keys = Object.keys(data['Unit_Details'][element]['Inference'])
+        all_keys.forEach(key =>{
+            document.write('<tr>')
+            document.write('<td style="color:black; text-align:center;background-color:#25CAEE">' +key + '<td>')   
+            document.write('</tr>')
+            Object.keys(data['Unit_Details'][element]['Inference'][key]).forEach(element2 => {
+                document.write('<tr>')
+                
+                var percentage = data['Unit_Details'][element]['Inference'][key][element2]
+                document.write('<td style="height:10px;width:' + percentage+'%;text-align:center;background-color:#C7eddf"><span style="color:black;font-size:12px;font-weigh:10">' + element2 + '-' + data['Unit_Details'][element]['Inference'][key][element2]+ ' | count - ' +data['Unit_Details'][element]['Inference_cnt'][key][element2]+ '</span></td>')
+                // 2C0BC3
+                document.write('</tr>')
+            });           
+       });
+       document.write('</table>')   
+       })
+       document.write('</div></div>')
+        document.write('<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"/>') 
+        document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"/>')
+        document.write('<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"/>')
+    };
+    
+}
+request.send();
+</script>
+
+    </head>
+    <body>       
+
+    </body>
+</html>
